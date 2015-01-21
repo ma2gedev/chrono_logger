@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["takayuki.1229@gmail.com"]
   spec.summary       = %q{A lock-free logger with timebased file rotation.}
   spec.description   = %q{A lock-free logger with timebased file rotation.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/ma2gedev/chrono_logger"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
