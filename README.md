@@ -1,6 +1,6 @@
 # ChronoLogger
 
-TODO: Write a gem description
+A lock-free logger with timebased file rotation.
 
 ## Installation
 
@@ -20,11 +20,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Same interfaces ruby's stdlib `Logger` except for `new` method.
+
+```
+require 'chrono_logger'
+
+logger = ChronoLogger.new('development.%Y%m%d')
+
+logger.error("Enjoy")
+logger.warn("logging!")
+logger.info("Enjoy")
+logger.debug("programming!")
+```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/chrono_logger/fork )
+1. Fork it ( https://github.com/ma2gedev/chrono_logger/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
