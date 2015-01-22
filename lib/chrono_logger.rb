@@ -61,22 +61,13 @@ class ChronoLogger < Logger
     def create_logfile(filename)
       begin
         logdev = open(filename, (File::WRONLY | File::APPEND | File::CREAT | File::EXCL))
-        logdev.flock(File::LOCK_EX)
         logdev.sync = true
-        add_log_header(logdev)
-        logdev.flock(File::LOCK_UN)
       rescue Errno::EEXIST
         # file is created by another process
         logdev = open_logfile(filename)
         logdev.sync = true
       end
       logdev
-    end
-
-    def add_log_header(file)
-      file.write(
-        "# Logfile created on %s by %s\n" % [Time.now.to_s, Logger::ProgName]
-      ) if file.size == 0
     end
 
     def check_shift_log

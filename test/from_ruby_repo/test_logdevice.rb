@@ -54,7 +54,7 @@ class TestLogDevice < Test::Unit::TestCase
     begin
       logdev.write('world')
       logfile = File.read(@filename)
-      assert_equal(2, logfile.split(/\n/).size)
+      assert_equal(1, logfile.split(/\n/).size)
       assert_match(/^helloworld$/, logfile)
     ensure
       logdev.close
