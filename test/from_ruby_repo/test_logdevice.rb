@@ -125,9 +125,10 @@ class TestLogDevice < Test::Unit::TestCase
   def test_shifting_midnight
     Dir.mktmpdir do |tmpdir|
       log = "log20140102"
+      old_log = File.join(tmpdir, log)
       begin
-        File.open(log, "w") {}
-        File.utime(*[Time.mktime(2014, 1, 1, 23, 59, 59)]*2, log)
+        File.open(old_log, "w") {}
+        File.utime(*[Time.mktime(2014, 1, 1, 23, 59, 59)]*2, old_log)
 
         Delorean.time_travel_to '2014-01-02 23:59:59'
         dev = ChronoLogger::TimeBasedLogDevice.new(File.join(tmpdir, "log%Y%m%d"))
@@ -140,7 +141,6 @@ class TestLogDevice < Test::Unit::TestCase
         dev.close
       end
 
-      old_log = File.join(tmpdir, log)
       cont = File.read(old_log)
       assert_match(/hello-1/, cont)
       assert_not_match(/hello-2/, cont)
