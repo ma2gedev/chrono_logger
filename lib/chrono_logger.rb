@@ -30,7 +30,7 @@ class ChronoLogger < Logger
     end
 
     def write(message)
-      if @dev.respond_to?(:stat)
+      if @pattern && @dev.respond_to?(:stat)
         begin
           check_shift_log
         rescue
