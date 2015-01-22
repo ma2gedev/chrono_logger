@@ -1,13 +1,12 @@
 # coding: US-ASCII
-require 'test/unit'
-require 'logger'
+require 'helper'
 require 'tempfile'
 
 class TestLogger < Test::Unit::TestCase
-  include Logger::Severity
+  include ChronoLogger::Severity
 
   def setup
-    @logger = Logger.new(nil)
+    @logger = ChronoLogger.new(nil)
   end
 
   class Log
@@ -28,7 +27,7 @@ class TestLogger < Test::Unit::TestCase
 
   def log_raw(logger, msg_id, *arg, &block)
     Tempfile.create(File.basename(__FILE__) + '.log') {|logdev|
-      logger.instance_eval { @logdev = Logger::LogDevice.new(logdev) }
+      logger.instance_eval { @logdev = ChronoLogger::TimeBasedLogDevice.new(logdev) }
       logger.__send__(msg_id, *arg, &block)
       logdev.rewind
       logdev.read
@@ -77,7 +76,7 @@ class TestLogger < Test::Unit::TestCase
 
   def test_datetime_format
     dummy = STDERR
-    logger = Logger.new(dummy)
+    logger = ChronoLogger.new(dummy)
     log = log_add(logger, INFO, "foo")
     assert_match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\s*\d+ $/, log.datetime)
     logger.datetime_format = "%d%b%Y@%H:%M:%S"
@@ -90,7 +89,7 @@ class TestLogger < Test::Unit::TestCase
 
   def test_formatter
     dummy = STDERR
-    logger = Logger.new(dummy)
+    logger = ChronoLogger.new(dummy)
     # default
     log = log(logger, :info, "foo")
     assert_equal("foo\n", log.msg)
@@ -115,14 +114,14 @@ class TestLogger < Test::Unit::TestCase
   end
 
   def test_initialize
-    logger = Logger.new(STDERR)
+    logger = ChronoLogger.new(STDERR)
     assert_nil(logger.progname)
     assert_equal(DEBUG, logger.level)
     assert_nil(logger.datetime_format)
   end
 
   def test_add
-    logger = Logger.new(nil)
+    logger = ChronoLogger.new(nil)
     logger.progname = "my_progname"
     assert(logger.add(INFO))
     log = log_add(logger, nil, "msg")
@@ -142,7 +141,7 @@ class TestLogger < Test::Unit::TestCase
   end
 
   def test_level_log
-    logger = Logger.new(nil)
+    logger = ChronoLogger.new(nil)
     logger.progname = "my_progname"
     log = log(logger, :debug, "custom_progname") { "msg" }
     assert_equal("msg\n", log.msg)
@@ -191,7 +190,7 @@ class TestLogger < Test::Unit::TestCase
   def test_close
     r, w = IO.pipe
     assert(!w.closed?)
-    logger = Logger.new(w)
+    logger = ChronoLogger.new(w)
     logger.close
     assert(w.closed?)
     r.close
@@ -207,7 +206,7 @@ class TestLogger < Test::Unit::TestCase
   end
 
   def test_format
-    logger = Logger.new(nil)
+    logger = ChronoLogger.new(nil)
     log = log_add(logger, INFO, "msg\n")
     assert_equal("msg\n\n", log.msg)
     begin
@@ -224,7 +223,7 @@ class TestLogger < Test::Unit::TestCase
 
   def test_lshift
     r, w = IO.pipe
-    logger = Logger.new(w)
+    logger = ChronoLogger.new(w)
     logger << "msg"
     read_ready, = IO.select([r], nil, nil, 0.1)
     w.close
@@ -233,7 +232,7 @@ class TestLogger < Test::Unit::TestCase
     assert_equal("msg", msg)
     #
     r, w = IO.pipe
-    logger = Logger.new(w)
+    logger = ChronoLogger.new(w)
     logger << "msg2\n\n"
     read_ready, = IO.select([r], nil, nil, 0.1)
     w.close
