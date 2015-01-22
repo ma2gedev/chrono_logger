@@ -1,5 +1,9 @@
 # ChronoLogger
 
+[![Gem Version](https://badge.fury.io/rb/chrono_logger.svg)](http://badge.fury.io/rb/chrono_logger)
+[![Build Status](https://travis-ci.org/ma2gedev/chrono_logger.svg)](https://travis-ci.org/ma2gedev/chrono_logger)
+[![endorse](https://api.coderwall.com/ma2gedev/endorsecount.png)](https://coderwall.com/ma2gedev)
+
 A lock-free logger with timebased file rotation.
 
 ## Installation
