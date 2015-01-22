@@ -103,7 +103,7 @@ class TestLogDevice < Test::Unit::TestCase
     new_log = [@tempfile.path, '20150123'].join
     $stderr, stderr = StringIO.new, $stderr
     begin
-      Delorean.time_travel_to '2015-01-22 23:59:59'
+      Delorean.time_travel_to '2015-01-22 23:59:59.990'
       logger = ChronoLogger.new(@format)
       Parallel.map(['a', 'b'], :in_processes => 2) do |letter|
         5000.times do
