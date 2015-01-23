@@ -13,7 +13,31 @@ class ChronoLogger < Logger
     end
   end
 
+  module Period
+    DAILY = 1
+
+    SiD = 24 * 60 * 60
+
+    def determine_period(format)
+      case format
+      when /%d/ then DAILY
+      else nil
+      end
+    end
+
+    def next_start_period(now, period)
+      case period
+      when DAILY
+          Time.mktime(now.year, now.month, now.mday) + SiD
+      else
+        nil
+      end
+    end
+  end
+
   class TimeBasedLogDevice < LogDevice
+    include Period
+
     DELAY_SECOND_TO_CLOSE_FILE = 5
 
     def initialize(log = nil, opt = {})
@@ -23,14 +47,17 @@ class ChronoLogger < Logger
         @dev = log
       else
         @pattern = log
-        @filename = Time.now.strftime(@pattern)
+        @period = determine_period(@pattern)
+        now = Time.now
+        @filename = now.strftime(@pattern)
+        @next_start_period = next_start_period(now, @period)
         @dev = open_logfile(@filename)
         @dev.sync = true
       end
     end
 
     def write(message)
-      if @pattern && @dev.respond_to?(:stat)
+      if @pattern
         begin
           check_shift_log
         rescue
@@ -71,10 +98,21 @@ class ChronoLogger < Logger
     end
 
     def check_shift_log
-      unless Time.now.strftime(@pattern) == @filename
-        new_filename = Time.now.strftime(@pattern)
+      if next_period?(Time.now)
+        now = Time.now
+        new_filename = now.strftime(@pattern)
+        next_start_period = next_start_period(now, @period)
         shift_log_period(new_filename)
         @filename = new_filename
+        @next_start_period = next_start_period
+      end
+    end
+
+    def next_period?(now)
+      if @period
+        @next_start_period <= now
+      else
+        Time.now.strftime(@pattern) != @filename
       end
     end
 
