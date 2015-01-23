@@ -98,30 +98,6 @@ class TestLogDevice < Test::Unit::TestCase
     r.close
   end
 
-  def test_shifting_age_in_multiprocess
-    old_log = [@tempfile.path, '20150122'].join
-    new_log = [@tempfile.path, '20150123'].join
-    $stderr, stderr = StringIO.new, $stderr
-    begin
-      Delorean.time_travel_to '2015-01-22 23:59:59.990'
-      logger = ChronoLogger.new(@format)
-      Parallel.map(['a', 'b'], :in_processes => 2) do |letter|
-        5000.times do
-          logger.info letter * 5000
-        end
-      end
-      assert_no_match(/log shifting failed/, $stderr.string)
-      assert_no_match(/log writing failed/, $stderr.string)
-      assert { File.exist?(old_log) }
-      assert { File.exist?(new_log) }
-    ensure
-      $stderr, stderr = stderr, $stderr
-      Delorean.back_to_the_present
-      File.unlink(old_log)
-      File.unlink(new_log)
-    end
-  end
-
   def test_shifting_midnight
     Dir.mktmpdir do |tmpdir|
       log = "log20140102"
