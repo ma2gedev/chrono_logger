@@ -28,7 +28,7 @@ class ChronoLogger < Logger
     def next_start_period(now, period)
       case period
       when DAILY
-          Time.mktime(now.year, now.month, now.mday) + SiD
+        Time.mktime(now.year, now.month, now.mday) + SiD
       else
         nil
       end
