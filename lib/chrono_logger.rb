@@ -57,18 +57,10 @@ class ChronoLogger < Logger
     end
 
     def write(message)
-      if @pattern
-        begin
-          check_shift_log
-        rescue
-          warn("log shifting failed. #{$!}")
-        end
-      end
-      begin
-        @dev.write(message)
-      rescue
-        warn("log writing failed. #{$!}")
-      end
+      check_shift_log if @pattern
+      @dev.write(message)
+    rescue
+      warn("log writing failed. #{$!}")
     end
 
     def close
