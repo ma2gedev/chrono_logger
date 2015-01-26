@@ -59,6 +59,10 @@ logger.info("Enjoy")
 logger.debug("programming!")
 ```
 
+## Limitation
+
+- High performance only daily based time formatting path for example `'%Y%m%d'`. You can create pull request if you need other time period.
+
 ## Contributing
 
 1. Fork it ( https://github.com/ma2gedev/chrono_logger/fork )
