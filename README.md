@@ -15,7 +15,8 @@ Ruby's stdlib `Logger` wraps `IO#write` in mutexes. `ChronoLogger` removes these
 ```
 logger = ChronoLogger.new('/log/production.log.%Y%m%d')
 # created /log/production.log.20150126 file
-# created /log/production.log.20150127 file when `logger.write` is called in the next day
+# created /log/production.log.20150127 file
+#   when `logger.write` is called in the next day
 ```
 
 ## Motivation
