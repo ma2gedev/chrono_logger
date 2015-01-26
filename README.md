@@ -8,6 +8,24 @@
 
 A lock-free logger with timebased file rotation.
 
+Ruby's stdlib `Logger` wraps `IO#write` in mutexes. `ChronoLogger` removes these mutexes.
+
+`ChronoLogger` provides time based file rotation such as:
+
+```
+logger = ChronoLogger.new('/log/production.log.%Y%m%d')
+# created /log/production.log.20150126 file
+# created /log/production.log.20150127 file when `logger.write` is called in the next day
+```
+
+## Motivation
+
+Current my projects uses `::Logger` with cronolog. So
+
+- Reduce dependency such as cronolog
+- Remove mutexes in ruby world because os already does
+- Support time based rotation without renaming file because file renaming is complex
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -31,6 +49,7 @@ Same interfaces ruby's stdlib `Logger` except for `new` method.
 ```
 require 'chrono_logger'
 
+# specify path with `Time#strftime` format
 logger = ChronoLogger.new('development.%Y%m%d')
 
 logger.error("Enjoy")
@@ -49,4 +68,4 @@ logger.debug("programming!")
 
 ## License
 
-MIT. See LICENSE.txt for more details.
+MIT. See [LICENSE.txt](LICENSE.txt) for more details.
