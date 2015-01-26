@@ -20,7 +20,10 @@ class ChronoLogger < Logger
 
     def determine_period(format)
       case format
-      when /%d/ then DAILY
+      when /%[SscXrT]/ then nil     # seconds
+      when /%[MR]/ then nil         # minutes
+      when /%[HklI]/ then nil       # hours
+      when /%[dejDFvx]/ then DAILY
       else nil
       end
     end

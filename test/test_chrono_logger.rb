@@ -1,5 +1,6 @@
 require 'helper'
 require 'tempfile'
+require 'tmpdir'
 require 'parallel'
 require 'delorean'
 
@@ -26,6 +27,57 @@ class TestChronoLogger < Test::Unit::TestCase
 
   def test_shifting_age_in_multiprocess
     confirm_daily_rotation(in_processes: 2)
+  end
+
+  def test_rotation_per_second
+    Dir.mktmpdir do |tmpdir|
+      begin
+        logger = ChronoLogger.new([tmpdir, '%Y%m%dT%H%M%S'].join)
+        Delorean.time_travel_to '2014-01-01 23:59:50'
+        logger.debug 'rotation'
+        Delorean.time_travel_to '2014-01-01 23:59:51'
+        logger.debug 'per second'
+
+        assert { File.exist?([tmpdir, '20140101T235950'].join) }
+        assert { File.exist?([tmpdir, '20140101T235951'].join) }
+      ensure
+        Delorean.back_to_the_present
+      end
+    end
+  end
+
+  class PeriodTest
+    include ChronoLogger::Period
+  end
+
+  def test_period
+    period = PeriodTest.new
+    # seconds not supported
+    assert { period.determine_period('%d%S').nil? }
+    assert { period.determine_period('%e%s').nil? }
+    assert { period.determine_period('%j%c').nil? }
+    assert { period.determine_period('%j%r').nil? }
+    assert { period.determine_period('%j%X').nil? }
+    assert { period.determine_period('%j%T').nil? }
+
+    # minutes not supported
+    assert { period.determine_period('%d%M').nil? }
+    assert { period.determine_period('%e%R').nil? }
+
+    # hours not supported
+    assert { period.determine_period('%d%H').nil? }
+    assert { period.determine_period('%e%k').nil? }
+    assert { period.determine_period('%e%l').nil? }
+    assert { period.determine_period('%e%I').nil? }
+
+    # days
+    assert { period.determine_period('%Y%m%d') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%Y%m%e') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%Y%j') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%D') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%F') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%v') == ChronoLogger::Period::DAILY }
+    assert { period.determine_period('%x') == ChronoLogger::Period::DAILY }
   end
 
 private
