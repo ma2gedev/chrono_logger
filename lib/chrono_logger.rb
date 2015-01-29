@@ -1,7 +1,16 @@
 require "chrono_logger/version"
 require 'logger'
 
+# A lock-free logger with timebased file rotation.
 class ChronoLogger < Logger
+
+  # @param logdev [String, IO] `Time#strftime` formatted filename (String) or IO object (typically STDOUT, STDERR, or an open file).
+  # @example
+  #
+  #   ChronoLogger.new('/log/production.log.%Y%m%d')
+  #   Time.now.strftime('%F')                       => "2015-01-29"
+  #   File.exist?('/log/production.log.20150129')   => true
+  #
   def initialize(logdev)
     @progname = nil
     @level = DEBUG

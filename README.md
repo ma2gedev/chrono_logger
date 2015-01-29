@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/ma2gedev/chrono_logger.svg)](https://travis-ci.org/ma2gedev/chrono_logger)
 [![Code Climate](https://codeclimate.com/github/ma2gedev/chrono_logger/badges/gpa.svg)](https://codeclimate.com/github/ma2gedev/chrono_logger)
 [![Coverage Status](https://coveralls.io/repos/ma2gedev/chrono_logger/badge.svg)](https://coveralls.io/r/ma2gedev/chrono_logger)
+[![Inline docs](http://inch-ci.org/github/ma2gedev/chrono_logger.svg?branch=master)](http://inch-ci.org/github/ma2gedev/chrono_logger)
 [![endorse](https://api.coderwall.com/ma2gedev/endorsecount.png)](https://coderwall.com/ma2gedev)
 
 A lock-free logger with timebased file rotation.
