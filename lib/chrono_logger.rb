@@ -144,5 +144,9 @@ class ChronoLogger < Logger
     def format_datetime(t)
       DATETIME_SPRINTF_FORMAT % [t.year, t.month, t.day, t.hour, t.min, t.sec, t.tv_usec]
     end
+
+    def datetime_format=(datetime_format)
+      raise 'do not support'
+    end
   end
 end
