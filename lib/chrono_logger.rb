@@ -14,7 +14,7 @@ class ChronoLogger < Logger
   def initialize(logdev)
     @progname = nil
     @level = DEBUG
-    @default_formatter = Formatter.new
+    @default_formatter = ::Logger::Formatter.new
     @formatter = nil
     @logdev = nil
     if logdev
