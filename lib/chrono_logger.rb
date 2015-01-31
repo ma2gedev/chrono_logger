@@ -135,4 +135,14 @@ class ChronoLogger < Logger
       end
     end
   end
+
+  # EXPERIMENTAL: this formatter faster than default `Logger::Formatter`
+  class Formatter < ::Logger::Formatter
+    DATETIME_SPRINTF_FORMAT = "%04d-%02d-%02dT%02d:%02d:%02d.%06d ".freeze
+
+    # same as `Logger::Formatter#format_datetime`'s default behaviour
+    def format_datetime(t)
+      DATETIME_SPRINTF_FORMAT % [t.year, t.month, t.day, t.hour, t.min, t.sec, t.tv_usec]
+    end
+  end
 end
