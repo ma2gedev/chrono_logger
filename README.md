@@ -33,8 +33,8 @@ File.exist?('/log/production.log.20150127')
 Current my projects uses `::Logger` with cronolog. So
 
 - Reduce dependency such as cronolog
-- Remove mutexes in ruby world because os already does
-- Support time based rotation without renaming file because file renaming is complex
+- Remove mutexes in ruby world because os already does when some environments (ex: ext4 file system)
+- Support time based rotation without renaming file because file renaming sometime makes problem
 
 ## Installation
 
@@ -70,7 +70,7 @@ logger.debug("programming!")
 
 ## Limitation
 
-- High performance only daily based time formatting path for example `'%Y%m%d'`. You can create pull request if you need other time period.
+- High performance logging only daily based time formatting path for example `'%Y%m%d'`. You can create pull request if you need other time period.
 
 ## Contributing
 
