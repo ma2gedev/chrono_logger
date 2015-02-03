@@ -68,6 +68,18 @@ logger.info("Enjoy")
 logger.debug("programming!")
 ```
 
+## Migrating from `::Logger` with cronolog
+
+You only change `Logger.new` into `ChronoLogger.new`:
+
+```
+# for instance your setup is like the following
+Logger.new(IO.popen("/usr/sbin/cronolog production.%Y%m%d", "w"))
+
+# turns into
+ChronoLogger.new('production.%Y%m%d')
+```
+
 ## Limitation
 
 - High performance logging only daily based time formatting path for example `'%Y%m%d'`. You can create pull request if you need other time period.
