@@ -1,5 +1,5 @@
-require 'rubygems'
-require 'ruby-prof'
+#require 'rubygems'
+#require 'ruby-prof'
 
 require 'bundler/setup'
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
@@ -42,7 +42,7 @@ Benchmark.bm(10) do |bm|
   bm.report('std_logger:') { COUNT.times {std_logger.info 'logged'} }
   bm.report('with_cronolog:') { COUNT.times {with_cronolog.info 'logged'} }
   bm.report('mono_logger:') { COUNT.times {mono_logger.info 'logged'} }
-  bm.report('mono_with_logger:') { COUNT.times {mono_logger.info 'logged'} }
+  bm.report('mono_with_logger:') { COUNT.times {mono_with_cronolog.info 'logged'} }
   bm.report('chrono_logger:') { COUNT.times {chrono_logger.info 'logged'} }
 end
 
