@@ -95,3 +95,8 @@ ChronoLogger.new('production.%Y%m%d')
 ## License
 
 MIT. See [LICENSE.txt](LICENSE.txt) for more details.
+
+## Resources
+
+- [ChronoLogger logging is 1.5x faster than ruby's stdlib Logger](https://coderwall.com/p/vjjszq/chronologger-logging-is-1-5x-faster-than-ruby-s-stdlib-logger)
+
