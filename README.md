@@ -56,7 +56,7 @@ Or install it yourself as:
 
 Same interfaces ruby's stdlib `Logger` except for `new` method.
 
-```
+```ruby
 require 'chrono_logger'
 
 # specify path with `Time#strftime` format
@@ -72,7 +72,7 @@ logger.debug("programming!")
 
 You only change `Logger.new` into `ChronoLogger.new`:
 
-```
+```ruby
 # for instance your setup is like the following
 Logger.new(IO.popen("/usr/sbin/cronolog production.%Y%m%d", "w"))
 
