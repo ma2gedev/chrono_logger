@@ -69,7 +69,7 @@ class ChronoLogger < Logger
     end
 
     def write(message)
-      check_shift_log if @pattern
+      check_and_shift_log if @pattern
       @dev.write(message)
     rescue
       warn("log writing failed. #{$!}")
@@ -101,12 +101,12 @@ class ChronoLogger < Logger
       logdev
     end
 
-    def check_shift_log
+    def check_and_shift_log
       if next_period?(Time.now)
         now = Time.now
         new_filename = now.strftime(@pattern)
         next_start_period = next_start_period(now, @period)
-        shift_log_period(new_filename)
+        shift_log(new_filename)
         @filename = new_filename
         @next_start_period = next_start_period
       end
@@ -120,7 +120,7 @@ class ChronoLogger < Logger
       end
     end
 
-    def shift_log_period(filename)
+    def shift_log(filename)
       begin
         @mutex.synchronize do
           tmp_dev = @dev
