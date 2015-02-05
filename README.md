@@ -68,6 +68,14 @@ logger.info("Enjoy")
 logger.debug("programming!")
 ```
 
+With Rails:
+
+```ruby
+# in config/environments/{development,production}.rb
+
+config.logger = ChronoLogger.new("#{config.paths['log'].first}.%Y%m%d")
+```
+
 ## Migrating from `::Logger` with cronolog
 
 You only change `Logger.new` into `ChronoLogger.new`:
