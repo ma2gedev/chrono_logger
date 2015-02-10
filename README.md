@@ -108,3 +108,7 @@ MIT. See [LICENSE.txt](LICENSE.txt) for more details.
 
 - [ChronoLogger logging is 1.5x faster than ruby's stdlib Logger](https://coderwall.com/p/vjjszq/chronologger-logging-is-1-5x-faster-than-ruby-s-stdlib-logger)
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ma2gedev/chrono_logger/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
