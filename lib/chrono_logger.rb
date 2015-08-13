@@ -1,5 +1,6 @@
 require "chrono_logger/version"
 require 'logger'
+require 'pathname'
 
 # A lock-free logger with timebased file rotation.
 class ChronoLogger < Logger
@@ -91,6 +92,7 @@ class ChronoLogger < Logger
 
     def create_logfile(filename)
       begin
+        Pathname(filename).dirname.mkpath
         logdev = open(filename, (File::WRONLY | File::APPEND | File::CREAT | File::EXCL))
         logdev.sync = true
       rescue Errno::EEXIST

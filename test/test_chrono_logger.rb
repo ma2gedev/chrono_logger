@@ -46,6 +46,23 @@ class TestChronoLogger < Test::Unit::TestCase
     end
   end
 
+  def test_rotation_per_day_and_create_dir
+    Dir.mktmpdir do |tmpdir|
+      begin
+        Delorean.time_travel_to '2015-08-01 23:59:50'
+        logger = ChronoLogger.new([tmpdir, '/%Y/%m/%d/test.log'].join)
+        logger.debug 'rotation'
+        Delorean.time_travel_to '2015-08-02 00:00:01'
+        logger.debug 'new dir'
+
+        assert { File.exist?([tmpdir, '/2015/08/01/test.log'].join) }
+        assert { File.exist?([tmpdir, '/2015/08/02/test.log'].join) }
+      ensure
+        Delorean.back_to_the_present
+      end
+    end
+  end
+
   class PeriodTest
     include ChronoLogger::Period
   end
