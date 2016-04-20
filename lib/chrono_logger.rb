@@ -55,7 +55,12 @@ class ChronoLogger < Logger
 
     def initialize(log = nil, opt = {})
       @dev = @filename = nil
-      @mutex = LogDeviceMutex.new
+      if defined?(LogDeviceMutex) # Ruby < 2.3
+        @mutex = LogDeviceMutex.new
+      else
+        mon_initialize
+        @mutex = self
+      end
       if log.respond_to?(:write) and log.respond_to?(:close)
         @dev = log
       else
