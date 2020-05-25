@@ -75,7 +75,7 @@ class ChronoLogger < Logger
     end
 
     def write(message)
-      check_and_shift_log if @pattern
+      check_and_shift_log if defined? @pattern
       @dev.write(message)
     rescue
       warn("log writing failed. #{$!}")
