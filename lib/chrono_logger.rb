@@ -54,7 +54,7 @@ class ChronoLogger < Logger
     DELAY_SECOND_TO_CLOSE_FILE = 5
 
     def initialize(log = nil, opt = {})
-      @dev = @filename = nil
+      @dev = @filename = @pattern = nil
       if defined?(LogDeviceMutex) # Ruby < 2.3
         @mutex = LogDeviceMutex.new
       else
