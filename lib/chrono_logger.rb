@@ -138,7 +138,7 @@ class ChronoLogger < Logger
           end
         end
       rescue Exception => ignored
-        warn("log shifting failed. #{$!}")
+        warn("log shifting failed. #{ignored}")
       end
     end
   end
