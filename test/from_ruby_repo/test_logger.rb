@@ -12,6 +12,7 @@ class TestLogger < Test::Unit::TestCase
   class Log
     attr_reader :label, :datetime, :pid, :severity, :progname, :msg
     def initialize(line)
+      # NOTE: adapt the following pattern ruby's original test after support only ruby 3.1 or higher
       /\A(\w+), \[([^#]*)#(\d+)\]\s+(\w+) -- (\w*): ([\x0-\xff]*)/ =~ line
       @label, @datetime, @pid, @severity, @progname, @msg = $1, $2, $3, $4, $5, $6
     end
@@ -82,10 +83,11 @@ class TestLogger < Test::Unit::TestCase
     assert_match(/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d.\s*\d+ $/, log.datetime)
     logger.datetime_format = "%d%b%Y@%H:%M:%S"
     log = log_add(logger, INFO, "foo")
-    assert_match(/^\d\d\w\w\w\d\d\d\d@\d\d:\d\d:\d\d$/, log.datetime)
+    # NOTE: ` ?` contained in the following will be removed after support only ruby 3.1 or higher
+    assert_match(/^\d\d\w\w\w\d\d\d\d@\d\d:\d\d:\d\d ?$/, log.datetime)
     logger.datetime_format = ""
     log = log_add(logger, INFO, "foo")
-    assert_match(/^$/, log.datetime)
+    assert_match(/^ ?$/, log.datetime)
   end
 
   def test_formatter
