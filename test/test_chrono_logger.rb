@@ -29,6 +29,31 @@ class TestChronoLogger < Test::Unit::TestCase
     confirm_daily_rotation(in_processes: 2)
   end
 
+  def test_exception_on_shifting_log
+    old_log = [@tempfile.path, '20220101'].join
+    new_log = [@tempfile.path, '20220102'].join
+    $stderr, stderr = StringIO.new, $stderr
+    begin
+      Delorean.time_travel_to '2022-01-01 23:59:59.990'
+      logger = ChronoLogger.new(@format)
+      old_logdev = logger.instance_variable_get('@logdev')
+      def old_logdev.create_logfile(filename)
+        raise 'override create_logfile method'
+      end
+      sleep 1 # waiting for shift log file
+
+      logger.info 'shift log'
+
+      assert_match(/log shifting failed\. override create_logfile method/, $stderr.string)
+      assert { File.exist?(old_log) }
+      assert { !File.exist?(new_log) }
+    ensure
+      $stderr, stderr = stderr, $stderr
+      Delorean.back_to_the_present
+      File.unlink(old_log)
+    end
+  end
+
   def test_rotation_per_second
     Dir.mktmpdir do |tmpdir|
       begin
