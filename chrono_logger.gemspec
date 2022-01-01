@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "delorean"
   spec.add_development_dependency "parallel"
-  spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "simplecov"
 
   # for performance check
   spec.add_development_dependency "mono_logger"
